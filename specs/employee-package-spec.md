@@ -22,6 +22,7 @@ de-<客群>-<能力 slug>
 | `employee.md` | ✅ | 人读定义卡（12 主字段 + 2 扩展组），由 employee.yaml 生成，**禁止手工编辑** |
 | `dependencies.yaml` | ✅ | 对 `agent-skills-core` 的外部依赖（含版本锁） |
 | `CHANGELOG.md` | ✅ | 变更日志 |
+| `NOTICE` | ✅ | 版权归属与第三方商标声明 |
 | `LICENSE` | ✅ | 许可 |
 | `CONTRIBUTING.md` | ✅ | 贡献说明 |
 
@@ -90,7 +91,7 @@ metadata:
   score: 23
   price: ¥99-249/月
   channels: [GitHub, 小红书, Coze扣子商店, 腾讯WorkBuddy Skill市场]
-  license: Proprietary
+  license: Apache-2.0
   version: 1.0.0
 spec:
   positioning: 产品冷启动期的"增长合伙人"

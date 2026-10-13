@@ -24,7 +24,7 @@ name: community-hotpost-digest        # == 目录名
 description: >-                       # 触发词齐全：做什么 + 何时触发（中英关键词）
   聚合社区热帖并摘要为选题与洞察素材。当用户提到热帖摘要、社区热点、
   hotspot digest 时使用——即使用户没有直接说出上述关键词，只要意图吻合也应触发。
-license: Proprietary                  # 或 MIT / Apache-2.0
+license: Apache-2.0
 compatibility: >-                     # 跨平台声明：需要什么环境、降级路径
   需要能读取工作区文件。若环境支持执行代码，将额外启用 scripts/ 路径。
   跨 WorkBuddy / ChatGPT / DeepSeek Harness / Kimi Work / 豆包工作。
