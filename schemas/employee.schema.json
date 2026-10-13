@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/xiaobandi/digital-employee-spec/schemas/employee.schema.json",
+  "title": "DigitalEmployee 机器契约",
+  "description": "小班底数字员工资产包 employee.yaml 的 JSON Schema。员工定义卡（employee.md）由本文件描述的契约自动生成。",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec", "runtime", "deliverables"],
+  "properties": {
+    "apiVersion": {"const": "digital-employee/v1"},
+    "kind": {"const": "DigitalEmployee"},
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name", "repo", "group", "group_label", "phase", "version"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^de_(indie|creator|ecommerce|local)_[a-z0-9_]+$"},
+        "name": {"type": "string", "minLength": 2},
+        "alias": {"type": "string", "description": "别名 / 旧名存档：记录历史命名，避免改名后混淆"},
+        "repo": {"type": "string", "pattern": "^de-(indie|creator|ecommerce|local)-[a-z0-9-]+$"},
+        "card_no": {"type": "string", "description": "调研报告定义卡编号（需求溯源锚点）"},
+        "group": {"enum": ["indie", "creator", "ecommerce", "local"]},
+        "group_label": {"type": "string"},
+        "phase": {"type": "string", "pattern": "^P[0-2]$"},
+        "complexity": {"type": "string", "description": "S/M/L 及构成说明（连接器、人日估算）"},
+        "score": {"type": "number", "minimum": 0, "maximum": 25, "description": "高频/痛点/客单价/广度/价值 五维合计"},
+        "price": {"type": "string", "description": "定价（含调研出处）"},
+        "channels": {"type": "array", "items": {"type": "string"}},
+        "license": {"type": "string"},
+        "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"}
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": ["positioning", "users", "boundary", "kpi"],
+      "properties": {
+        "positioning": {"type": "string", "minLength": 8, "description": "一句话定位"},
+        "users": {"type": "string", "description": "目标用户画像"},
+        "boundary": {"type": "string", "pattern": "做[：:]", "description": "格式：做：…；不做：…。不做列是红线的一部分"},
+        "kpi": {"type": "string", "description": "可量化指标（频率/百分比/时延）"},
+        "roi_summary": {"type": "string"},
+        "demand_refs": {"type": "array", "items": {"type": "string", "pattern": "^D\\d+$"}},
+        "demand_support": {"enum": ["充分", "部分", "待验证"]},
+        "demand_evidence": {"enum": ["高", "中", "低"]}
+      }
+    },
+    "runtime": {
+      "type": "object",
+      "required": ["system_prompt"],
+      "properties": {
+        "system_prompt": {"type": "string"},
+        "boundary": {"type": "string"},
+        "kpi": {"type": "string"}
+      }
+    },
+    "deliverables": {
+      "type": "object",
+      "required": ["skills", "workflows"],
+      "properties": {
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name", "kind", "path", "version"],
+            "properties": {
+              "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+              "name": {"type": "string"},
+              "kind": {"enum": ["private", "shared"]},
+              "path": {"type": "string"},
+              "version": {"type": "string"},
+              "maturity": {"enum": ["implemented", "contract-complete", "planned"]}
+            }
+          }
+        },
+        "workflows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["slug", "name", "path", "version", "calls"],
+            "properties": {
+              "slug": {"type": "string", "pattern": "^wf-[a-z0-9-]+$"},
+              "name": {"type": "string"},
+              "path": {"type": "string"},
+              "version": {"type": "string"},
+              "phase": {"type": "string", "pattern": "^P[0-2]$"},
+              "calls": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "调用的技能 slug；必须真实存在（本仓 skills/ 或 external_dependencies）"
+              }
+            }
+          }
+        },
+        "knowledge_base": {"type": "string"},
+        "connectors": {"type": "string"}
+      }
+    },
+    "external_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["repo", "version", "skills", "resolution"],
+        "properties": {
+          "repo": {"type": "string"},
+          "version": {"type": "string"},
+          "skills": {"type": "array", "items": {"type": "string"}},
+          "resolution": {"enum": ["external", "vendored"]}
+        }
+      }
+    },
+    "spec_only_dependencies": {"type": "array"}
+  }
+}
